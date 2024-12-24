@@ -64,11 +64,12 @@ export function html(latest: TodayFuture): string {
     }
     #news-ticker-content {
       display: inline-block;
-      animation: ticker 60s linear infinite;
+      padding-left: 100%;
+      animation: ticker 30s linear infinite;
     }
     @keyframes ticker {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
     }
     #date-display {
       position: fixed;
@@ -85,6 +86,7 @@ export function html(latest: TodayFuture): string {
   <canvas id="shader-background"></canvas>
   <div id="news-ticker">
     <div id="news-ticker-content">
+      ${latest.news.map(news => `${news.title} • `).join('')}
       ${latest.news.map(news => `${news.title} • `).join('')}
     </div>
   </div>
