@@ -236,7 +236,7 @@ export function html(latest: TodayFuture): string {
     const soundToggle = document.getElementById('sound-toggle');
     let soundOn = true;
 
-    birdsAudio.volume = 0.1;
+    birdsAudio.volume = 0.05;
 
     // Try to autoplay both tracks
     Promise.all([
