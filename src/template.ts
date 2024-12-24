@@ -65,7 +65,8 @@ export function html(latest: TodayFuture): string {
     #news-ticker-content {
       display: inline-block;
       padding-left: 100%;
-      animation: ticker 30s linear infinite;
+      animation: ticker linear infinite;
+      animation-duration: 30s;
     }
     @keyframes ticker {
       0% { transform: translate3d(0, 0, 0); }
@@ -156,6 +157,17 @@ export function html(latest: TodayFuture): string {
       requestAnimationFrame(render);
     }
     initShader();
+
+    // Calculate news ticker scroll speed based on content width
+    const tickerContent = document.getElementById('news-ticker-content');
+    function adjustTickerSpeed() {
+      const contentWidth = tickerContent.offsetWidth;
+      const baseSpeed = 35; // pixels per second
+      const duration = contentWidth / baseSpeed;
+      tickerContent.style.animationDuration = `${duration}s`;
+    }
+    adjustTickerSpeed();
+    window.addEventListener('resize', adjustTickerSpeed);
 
     const dateDisplay = document.getElementById('date-display');
     dateDisplay.textContent = new Date().toISOString().split('T')[0];
