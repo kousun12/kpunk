@@ -110,10 +110,45 @@ export function html(latest: TodayFuture): string {
   <script id="fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
     uniform float u_time;
+    
+    float random(vec2 st) {
+      return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+    }
+    
     void main() {
       vec2 uv = gl_FragCoord.xy / vec2(800, 600);
-      float color = 0.5 + 0.3 * sin(uv.x * 10.0 + u_time) * sin(uv.y * 10.0 - u_time);
-      gl_FragColor = vec4(vec3(color), 1.0);
+      
+      // Create a glitch effect
+      float glitchStrength = 0.03;
+      float glitchTime = floor(u_time * 2.0);
+      vec2 glitchOffset = vec2(
+        random(vec2(glitchTime, uv.y)) * 2.0 - 1.0,
+        random(vec2(glitchTime + 1.0, uv.x)) * 2.0 - 1.0
+      ) * glitchStrength;
+      
+      // Distort the UV coordinates
+      vec2 distortedUV = uv + glitchOffset;
+      distortedUV += 0.02 * sin(distortedUV.yx * 10.0 + u_time);
+      
+      // Create a haunting wave pattern
+      float wave = sin(distortedUV.x * 8.0 + u_time * 0.5) * 
+                  sin(distortedUV.y * 6.0 - u_time * 0.3) *
+                  sin((distortedUV.x + distortedUV.y) * 4.0 + u_time * 0.7);
+      
+      // Add some noise
+      float noise = random(distortedUV + u_time * 0.1) * 0.1;
+      
+      // Combine effects
+      float color = 0.5 + 0.3 * wave + noise;
+      
+      // Add subtle color variations
+      vec3 finalColor = vec3(
+        color * 0.9,
+        color * 0.85,
+        color
+      );
+      
+      gl_FragColor = vec4(finalColor, 1.0);
     }
   </script>
   <script>
