@@ -82,15 +82,22 @@ export function html(latest: TodayFuture): string {
       font-family: monospace;
       font-size: 12px;
       opacity: 0.7;
+      display: flex;
+      align-items: center;
     }
     #github-link {
       color: white;
       text-decoration: none;
       opacity: 0.7;
       margin-left: 10px;
+      font-family: monospace;
+      font-size: 12px;
     }
     #github-link:hover {
       opacity: 1;
+    }
+    #github-link:visited {
+      color: white;
     }
   </style>
 </head>
@@ -105,8 +112,10 @@ export function html(latest: TodayFuture): string {
   <div id="future-container">
     <pre title="${hoverTitle}">${latest.future}</pre>
   </div>
-  <div id="date-display"></div>
-  <a id="github-link" href="https://github.com/kpunkka/lost-futures" target="_blank">[github]</a>
+  <div id="date-display">
+    <span></span>
+    <a id="github-link" href="https://github.com/kpunkka/lost-futures" target="_blank">[github]</a>
+  </div>
   <audio id="ambient-sound" loop>
     <source src="https://media.kpunk.computer/wvts.m4a" type="audio/mp4">
   </audio>
@@ -217,7 +226,7 @@ export function html(latest: TodayFuture): string {
     window.addEventListener('resize', adjustTickerSpeed);
 
     const dateDisplay = document.getElementById('date-display');
-    dateDisplay.textContent = new Date().toISOString().split('T')[0];
+    dateDisplay.querySelector('span').textContent = new Date().toISOString().split('T')[0];
 
     const audio = document.getElementById('ambient-sound');
     const soundToggle = document.getElementById('sound-toggle');
