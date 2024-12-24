@@ -49,6 +49,27 @@ export function html(latest: TodayFuture): string {
     #sound-toggle:hover {
       opacity: 1;
     }
+    #news-ticker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 8px 0;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    #news-ticker-content {
+      display: inline-block;
+      animation: ticker 60s linear infinite;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
     #date-display {
       position: fixed;
       bottom: 10px;
@@ -62,6 +83,11 @@ export function html(latest: TodayFuture): string {
 </head>
 <body>
   <canvas id="shader-background"></canvas>
+  <div id="news-ticker">
+    <div id="news-ticker-content">
+      ${latest.news.map(news => `${news.title} • `).join('')}
+    </div>
+  </div>
   <div id="future-container">
     <pre title="${hoverTitle}">${latest.future}</pre>
   </div>
