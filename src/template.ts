@@ -1,11 +1,11 @@
-export function html(poem: string): string {
+export function html(future: string): string {
   return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Poem</title>
+  <title>Lost Futures</title>
   <style>
     body, html {
       margin: 0;
@@ -21,7 +21,7 @@ export function html(poem: string): string {
       height: 100%;
       z-index: -1;
     }
-    #poem-container {
+    #future-container {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -34,8 +34,8 @@ export function html(poem: string): string {
 </head>
 <body>
   <canvas id="shader-background"></canvas>
-  <div id="poem-container">
-    <pre>${poem}</pre>
+  <div id="future-container">
+    <pre>${future}</pre>
   </div>
   <script id="vertex-shader" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -94,7 +94,6 @@ export function html(poem: string): string {
       
       requestAnimationFrame(render);
     }
-    
     initShader();
   </script>
 </body>
