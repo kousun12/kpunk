@@ -83,6 +83,15 @@ export function html(latest: TodayFuture): string {
       font-size: 12px;
       opacity: 0.7;
     }
+    #github-link {
+      color: white;
+      text-decoration: none;
+      opacity: 0.7;
+      margin-left: 10px;
+    }
+    #github-link:hover {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -97,6 +106,7 @@ export function html(latest: TodayFuture): string {
     <pre title="${hoverTitle}">${latest.future}</pre>
   </div>
   <div id="date-display"></div>
+  <a id="github-link" href="https://github.com/kpunkka/lost-futures" target="_blank">[github]</a>
   <audio id="ambient-sound" loop>
     <source src="https://media.kpunk.computer/wvts.m4a" type="audio/mp4">
   </audio>
