@@ -30,6 +30,22 @@ export function html(future: string): string {
       font-family: Arial, sans-serif;
       text-align: center;
     }
+    #sound-toggle {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      color: white;
+      font-family: monospace;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+    #sound-toggle:hover {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -37,6 +53,10 @@ export function html(future: string): string {
   <div id="future-container">
     <pre>${future}</pre>
   </div>
+  <audio id="ambient-sound" loop>
+    <source src="https://media.kpunk.computer/wvts.m4a" type="audio/mp4">
+  </audio>
+  <button id="sound-toggle">[sound off]</button>
   <script id="vertex-shader" type="x-shader/x-vertex">
     attribute vec2 a_position;
     void main() {
@@ -95,6 +115,22 @@ export function html(future: string): string {
       requestAnimationFrame(render);
     }
     initShader();
+
+    // Sound handling
+    const audio = document.getElementById('ambient-sound');
+    const soundToggle = document.getElementById('sound-toggle');
+    let soundOn = false;
+
+    soundToggle.addEventListener('click', () => {
+      soundOn = !soundOn;
+      if (soundOn) {
+        audio.play();
+        soundToggle.textContent = '[sound on]';
+      } else {
+        audio.pause();
+        soundToggle.textContent = '[sound off]';
+      }
+    });
   </script>
 </body>
 </html>
