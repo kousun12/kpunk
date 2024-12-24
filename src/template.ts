@@ -133,7 +133,16 @@ export function html(future: string): string {
     // Sound handling
     const audio = document.getElementById('ambient-sound');
     const soundToggle = document.getElementById('sound-toggle');
-    let soundOn = false;
+    let soundOn = true;
+
+    // Try to autoplay
+    audio.play().then(() => {
+      soundToggle.textContent = '[sound on]';
+    }).catch(() => {
+      // Autoplay failed (expected in most browsers)
+      soundOn = false;
+      soundToggle.textContent = '[sound off]';
+    });
 
     soundToggle.addEventListener('click', () => {
       soundOn = !soundOn;
