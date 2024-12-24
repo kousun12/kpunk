@@ -1,4 +1,7 @@
-export function html(future: string): string {
+import { TodayFuture } from "./types";
+
+export function html(latest: TodayFuture): string {
+  const hoverTitle = latest.news.map((news) => `- ${news.title}`).join("\n");
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +63,7 @@ export function html(future: string): string {
 <body>
   <canvas id="shader-background"></canvas>
   <div id="future-container">
-    <pre>${future}</pre>
+    <pre title="${hoverTitle}">${latest.future}</pre>
   </div>
   <div id="date-display"></div>
   <audio id="ambient-sound" loop>

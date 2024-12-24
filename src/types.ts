@@ -6,3 +6,7 @@ export interface Env {
   EXTRA_HEADERS?: string;
   NEWS_API_KEY: string;
 }
+
+export type NewsItem = { title: string; description: string };
+export type LostFuture = { date: string; value: string };
+export type TodayFuture = { date: string; future: string; news: NewsItem[] };

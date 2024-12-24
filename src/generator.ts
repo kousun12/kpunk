@@ -1,23 +1,23 @@
-import { Env } from "./types";
+import { Env, LostFuture, NewsItem, TodayFuture } from "./types";
 
-type NewsItem = { title: string; description: string };
-type LostFuture = { date: string; value: string };
-
-export async function getFuture(env: Env): Promise<string> {
+export async function getFuture(env: Env): Promise<TodayFuture> {
   const currentDate = new Date().toISOString().split("T")[0];
   let found = await env.LOST_FUTURES_KV.get(currentDate);
-  if (found) return found;
+  const news = await getNewsItems(6, env);
 
-  const items = await getNewsItems(6, env);
-  let newsConcat = items
+  if (found && news) {
+    return { date: currentDate, future: found, news: news };
+  }
+
+  let newsConcat = news
     .map((item) => `${item.title}. ${item.description}`)
     .join("\n");
 
-  const toParse = env.BASE_PARAMS.replace(
+  const rawParams = env.BASE_PARAMS.replace(
     "{{ NEWS_ITEMS }}",
     JSON.stringify(newsConcat).replace(/^"(.*)"$/, "$1"),
   );
-  const baseParams = JSON.parse(toParse);
+  const baseParams = JSON.parse(rawParams);
   const extraHeaders = env.EXTRA_HEADERS ? JSON.parse(env.EXTRA_HEADERS) : {};
   const future = await generate(
     env.BASE_URL,
@@ -26,7 +26,7 @@ export async function getFuture(env: Env): Promise<string> {
     extraHeaders,
   );
   await env.LOST_FUTURES_KV.put(currentDate, future);
-  return future;
+  return { date: currentDate, future, news: news };
 }
 
 async function getNewsItems(n: number, env: Env): Promise<NewsItem[]> {
@@ -47,7 +47,6 @@ async function getNewsItems(n: number, env: Env): Promise<NewsItem[]> {
     },
   });
   const data: { articles: NewsItem[] } = await response.json();
-  console.log("NEWS API", data);
   if (!data.articles || data.articles.length === 0) {
     throw new Error("Invalid response");
   }
