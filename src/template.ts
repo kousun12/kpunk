@@ -164,7 +164,7 @@ export function html(latest: TodayFuture): string {
       const contentWidth = tickerContent.offsetWidth;
       const baseSpeed = 35; // pixels per second
       const duration = contentWidth / baseSpeed;
-      tickerContent.style.animationDuration = `${duration}s`;
+      tickerContent.style.animationDuration = \`\${duration}s\`;
     }
     adjustTickerSpeed();
     window.addEventListener('resize', adjustTickerSpeed);
