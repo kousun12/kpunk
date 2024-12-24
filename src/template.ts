@@ -87,8 +87,8 @@ export function html(latest: TodayFuture): string {
   <canvas id="shader-background"></canvas>
   <div id="news-ticker">
     <div id="news-ticker-content">
-      ${latest.news.map(news => `${news.title} • `).join('')}
-      ${latest.news.map(news => `${news.title} • `).join('')}
+      ${latest.news.map((news) => `${news.title} • `).join("")}
+      ${latest.news.map((news) => `${news.title} • `).join("")}
     </div>
   </div>
   <div id="future-container">
@@ -164,7 +164,7 @@ export function html(latest: TodayFuture): string {
       const contentWidth = tickerContent.offsetWidth;
       const baseSpeed = 35; // pixels per second
       const duration = contentWidth / baseSpeed;
-      tickerContent.style.animationDuration = `${duration}s`;
+      tickerContent.style.animationDuration = `{duration}s`;
     }
     adjustTickerSpeed();
     window.addEventListener('resize', adjustTickerSpeed);
