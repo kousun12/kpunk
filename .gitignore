@@ -21,6 +21,9 @@ yarn-error.log*
 .idea/
 *.swp
 *.swo
+.aider*
+.wrangler
+*.m4a
 
 # OS
 .DS_Store

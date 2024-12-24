@@ -1,4 +1,8 @@
 export interface Env {
-  LOST_FUTURES: KVNamespace;
-  MY_API_KEY: string;
+  LOST_FUTURES_KV: KVNamespace;
+  API_KEY: string;
+  BASE_URL: string;
+  BASE_PARAMS: string;
+  EXTRA_HEADERS?: string;
+  NEWS_API_KEY: string;
 }

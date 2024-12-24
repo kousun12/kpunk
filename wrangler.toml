@@ -11,6 +11,9 @@ id = "3e5968537a094a86bfbcdb867ce9f940"
 [vars]
 API_KEY = "placeholder"
 BASE_URL = "placeholder"
+EXTRA_HEADERS = "{}"
+BASE_PARAMS = "{}"
+NEWS_API_KEY = "placeholder"
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
