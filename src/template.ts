@@ -67,6 +67,7 @@ export function html(latest: TodayFuture): string {
       padding-left: 100%;
       animation: ticker linear infinite;
       animation-duration: 30s;
+      opacity: 0.5;
     }
     @keyframes ticker {
       0% { transform: translate3d(0, 0, 0); }
@@ -162,7 +163,7 @@ export function html(latest: TodayFuture): string {
     const tickerContent = document.getElementById('news-ticker-content');
     function adjustTickerSpeed() {
       const contentWidth = tickerContent.offsetWidth;
-      const baseSpeed = 35; // pixels per second
+      const baseSpeed = 60;
       const duration = contentWidth / baseSpeed;
       tickerContent.style.animationDuration = \`\${duration}s\`;
     }
