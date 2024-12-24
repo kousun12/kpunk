@@ -46,6 +46,15 @@ export function html(future: string): string {
     #sound-toggle:hover {
       opacity: 1;
     }
+    #date-display {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: white;
+      font-family: monospace;
+      font-size: 12px;
+      opacity: 0.7;
+    }
   </style>
 </head>
 <body>
@@ -53,6 +62,7 @@ export function html(future: string): string {
   <div id="future-container">
     <pre>${future}</pre>
   </div>
+  <div id="date-display"></div>
   <audio id="ambient-sound" loop>
     <source src="https://media.kpunk.computer/wvts.m4a" type="audio/mp4">
   </audio>
@@ -115,6 +125,10 @@ export function html(future: string): string {
       requestAnimationFrame(render);
     }
     initShader();
+
+    // Date display
+    const dateDisplay = document.getElementById('date-display');
+    dateDisplay.textContent = new Date().toISOString().split('T')[0];
 
     // Sound handling
     const audio = document.getElementById('ambient-sound');
