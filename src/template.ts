@@ -126,11 +126,9 @@ export function html(future: string): string {
     }
     initShader();
 
-    // Date display
     const dateDisplay = document.getElementById('date-display');
     dateDisplay.textContent = new Date().toISOString().split('T')[0];
 
-    // Sound handling
     const audio = document.getElementById('ambient-sound');
     const soundToggle = document.getElementById('sound-toggle');
     let soundOn = true;
@@ -139,7 +137,6 @@ export function html(future: string): string {
     audio.play().then(() => {
       soundToggle.textContent = '[sound on]';
     }).catch(() => {
-      // Autoplay failed (expected in most browsers)
       soundOn = false;
       soundToggle.textContent = '[sound off]';
     });
