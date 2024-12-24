@@ -118,34 +118,34 @@ export function html(latest: TodayFuture): string {
     void main() {
       vec2 uv = gl_FragCoord.xy / vec2(800, 600);
       
-      // Create a glitch effect
-      float glitchStrength = 0.03;
-      float glitchTime = floor(u_time * 2.0);
+      // Slower, more deliberate glitch effect
+      float glitchStrength = 0.02;
+      float glitchTime = floor(u_time * 0.8); // Slower glitch timing
       vec2 glitchOffset = vec2(
         random(vec2(glitchTime, uv.y)) * 2.0 - 1.0,
         random(vec2(glitchTime + 1.0, uv.x)) * 2.0 - 1.0
       ) * glitchStrength;
       
-      // Distort the UV coordinates
+      // More subtle distortion
       vec2 distortedUV = uv + glitchOffset;
-      distortedUV += 0.02 * sin(distortedUV.yx * 10.0 + u_time);
+      distortedUV += 0.01 * sin(distortedUV.yx * 8.0 + u_time * 0.3);
       
-      // Create a haunting wave pattern
-      float wave = sin(distortedUV.x * 8.0 + u_time * 0.5) * 
-                  sin(distortedUV.y * 6.0 - u_time * 0.3) *
-                  sin((distortedUV.x + distortedUV.y) * 4.0 + u_time * 0.7);
+      // Slower, more melancholic wave pattern
+      float wave = sin(distortedUV.x * 4.0 + u_time * 0.2) * 
+                  sin(distortedUV.y * 3.0 - u_time * 0.15) *
+                  sin((distortedUV.x + distortedUV.y) * 2.0 + u_time * 0.3);
       
-      // Add some noise
-      float noise = random(distortedUV + u_time * 0.1) * 0.1;
+      // Reduced noise for austerity
+      float noise = random(distortedUV + u_time * 0.05) * 0.05;
       
-      // Combine effects
-      float color = 0.5 + 0.3 * wave + noise;
+      // Darker overall tone
+      float color = 0.35 + 0.25 * wave + noise;
       
-      // Add subtle color variations
+      // Cooler, more muted color palette
       vec3 finalColor = vec3(
-        color * 0.9,
-        color * 0.85,
-        color
+        color * 0.8,  // Reduced red
+        color * 0.85, // Slightly more green for a colder feel
+        color * 0.95  // More blue bias
       );
       
       gl_FragColor = vec4(finalColor, 1.0);
