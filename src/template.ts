@@ -114,7 +114,7 @@ export function html(latest: TodayFuture): string {
   </div>
   <div id="date-display">
     <span></span>
-    <a id="github-link" href="https://github.com/kpunkka/lost-futures" target="_blank">[github]</a>
+    <a id="github-link" href="https://github.com/kousun12/kpunk" target="_blank">[github]</a>
   </div>
   <audio id="ambient-sound" loop>
     <source src="https://media.kpunk.computer/wvts.m4a" type="audio/mp4">
