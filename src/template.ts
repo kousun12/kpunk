@@ -119,6 +119,9 @@ export function html(latest: TodayFuture): string {
   <audio id="ambient-sound" loop>
     <source src="https://media.kpunk.computer/wvts.m4a" type="audio/mp4">
   </audio>
+  <audio id="birds-sound" loop>
+    <source src="https://media.kpunk.computer/birds.m4a" type="audio/mp4">
+  </audio>
   <button id="sound-toggle">[sound off]</button>
   <script id="vertex-shader" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -228,12 +231,19 @@ export function html(latest: TodayFuture): string {
     const dateDisplay = document.getElementById('date-display');
     dateDisplay.querySelector('span').textContent = new Date().toISOString().split('T')[0];
 
-    const audio = document.getElementById('ambient-sound');
+    const ambientAudio = document.getElementById('ambient-sound');
+    const birdsAudio = document.getElementById('birds-sound');
     const soundToggle = document.getElementById('sound-toggle');
     let soundOn = true;
 
-    // Try to autoplay
-    audio.play().then(() => {
+    // Set birds volume to 20%
+    birdsAudio.volume = 0.2;
+
+    // Try to autoplay both tracks
+    Promise.all([
+      ambientAudio.play(),
+      birdsAudio.play()
+    ]).then(() => {
       soundToggle.textContent = '[sound on]';
     }).catch(() => {
       soundOn = false;
@@ -243,10 +253,12 @@ export function html(latest: TodayFuture): string {
     soundToggle.addEventListener('click', () => {
       soundOn = !soundOn;
       if (soundOn) {
-        audio.play();
+        ambientAudio.play();
+        birdsAudio.play();
         soundToggle.textContent = '[sound on]';
       } else {
-        audio.pause();
+        ambientAudio.pause();
+        birdsAudio.pause();
         soundToggle.textContent = '[sound off]';
       }
     });
