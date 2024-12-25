@@ -258,12 +258,22 @@ export function html(latest: TodayFuture): string {
             document.getElementById('current-date').textContent = date;
             document.querySelector('#future-container pre').textContent = data.future;
             
+            // Update news ticker content
             const tickerContent = document.getElementById('news-ticker-content');
-            const newsText = data.news.map(n => \`\${n.title} • \`).join('');
-            tickerContent.innerHTML = newsText + newsText;
-            adjustTickerSpeed();
+            const newsText = data.news.map(news => \`\${news.title} • \`).join('');
+            tickerContent.innerHTML = newsText + newsText; // Duplicate for continuous scroll
             
+            // Reset animation
+            tickerContent.style.animation = 'none';
+            tickerContent.offsetHeight; // Trigger reflow
+            tickerContent.style.animation = null;
+            
+            adjustTickerSpeed();
             displayedDate = date;
+            
+            // Update hover title
+            const hoverTitle = data.news.map(news => \`- \${news.title}\`).join('\\n');
+            document.querySelector('#future-container pre').title = hoverTitle;
           }
         });
     }
