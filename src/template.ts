@@ -33,6 +33,18 @@ export function html(latest: TodayFuture): string {
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
+      position: relative;
+    }
+    .future-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+    }
+    .future-text.fade-out {
+      opacity: 0;
     }
     #sound-toggle {
       position: fixed;
@@ -119,7 +131,7 @@ export function html(latest: TodayFuture): string {
     </div>
   </div>
   <div id="future-container">
-    <pre title="${hoverTitle}">${latest.future}</pre>
+    <pre class="future-text" title="${hoverTitle}">${latest.future}</pre>
   </div>
   <div id="date-display">
     <span></span>
@@ -256,7 +268,30 @@ export function html(latest: TodayFuture): string {
         .then(data => {
           if (data) {
             document.getElementById('current-date').textContent = date;
-            document.querySelector('#future-container pre').textContent = data.future;
+            // Create new future text element
+            const newFutureText = document.createElement('pre');
+            newFutureText.className = 'future-text';
+            newFutureText.style.opacity = '0';
+            newFutureText.textContent = data.future;
+            newFutureText.title = data.news.map(news => \`- \${news.title}\`).join('\\n');
+            
+            // Get the old future text
+            const oldFutureText = document.querySelector('#future-container pre');
+            
+            // Add new text and trigger fade transition
+            document.getElementById('future-container').appendChild(newFutureText);
+            
+            // Force browser reflow
+            void newFutureText.offsetWidth;
+            
+            // Start fade out of old text and fade in of new text
+            oldFutureText.classList.add('fade-out');
+            newFutureText.style.opacity = '1';
+            
+            // Remove old text after animation
+            setTimeout(() => {
+              oldFutureText.remove();
+            }, 1000);
             
             // Update news ticker content
             const tickerContent = document.getElementById('news-ticker-content');
