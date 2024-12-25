@@ -33,7 +33,6 @@ export function html(latest: TodayFuture): string {
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
-      position: relative;
     }
     .future-text {
       position: absolute;
