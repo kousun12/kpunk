@@ -41,6 +41,8 @@ export function html(latest: TodayFuture): string {
       transform: translate(-50%, -50%);
       opacity: 1;
       transition: opacity 1s ease-in-out;
+      font-size: 1rem;
+      line-height: 1.5;
     }
     .future-text.fade-out {
       opacity: 0;
