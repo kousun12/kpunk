@@ -10,8 +10,6 @@ export default {
   ): Promise<Response> {
     const future = await getFuture(env);
     const res = html(future);
-    return new Response(res, {
-      headers: { "Content-Type": "text/html" },
-    });
+    return new Response(res, { headers: { "Content-Type": "text/html" } });
   },
 };
