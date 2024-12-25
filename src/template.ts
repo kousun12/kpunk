@@ -294,6 +294,9 @@ export function html(latest: TodayFuture): string {
               
               // Start fade in of new text
               newFutureText.style.opacity = '1';
+              
+              // Reset fade-out class for next transition
+              newFutureText.classList.remove('fade-out');
             }, 1000);
             
             // Update news ticker content
