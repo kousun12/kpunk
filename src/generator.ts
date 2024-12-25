@@ -1,7 +1,8 @@
 import { Env, LostFuture, NewsItem, TodayFuture } from "./types";
 
 export async function getFuture(env: Env, date?: string): Promise<TodayFuture> {
-  const requestDate = date || new Date().toISOString().split("T")[0];
+  const currentDate = new Date().toISOString().split("T")[0];
+  const requestDate = date || currentDate;
   let found = await env.LOST_FUTURES_KV.get(requestDate);
   const news = await getNewsItems(6, env);
 
