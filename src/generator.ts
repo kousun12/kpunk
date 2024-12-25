@@ -1,8 +1,8 @@
 import { Env, LostFuture, NewsItem, TodayFuture } from "./types";
 
-export async function getFuture(env: Env): Promise<TodayFuture> {
-  const currentDate = new Date().toISOString().split("T")[0];
-  let found = await env.LOST_FUTURES_KV.get(currentDate);
+export async function getFuture(env: Env, date?: string): Promise<TodayFuture> {
+  const requestDate = date || new Date().toISOString().split("T")[0];
+  let found = await env.LOST_FUTURES_KV.get(requestDate);
   const news = await getNewsItems(6, env);
 
   if (found && news) {
@@ -26,7 +26,7 @@ export async function getFuture(env: Env): Promise<TodayFuture> {
     extraHeaders,
   );
   await env.LOST_FUTURES_KV.put(currentDate, future);
-  return { date: currentDate, future, news: news };
+  return { date: requestDate, future, news: news };
 }
 
 async function getNewsItems(n: number, env: Env): Promise<NewsItem[]> {

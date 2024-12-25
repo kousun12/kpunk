@@ -84,6 +84,15 @@ export function html(latest: TodayFuture): string {
       opacity: 0.7;
       display: flex;
       align-items: center;
+      user-select: none;
+    }
+    .date-nav {
+      cursor: pointer;
+      padding: 0 8px;
+      opacity: 0.7;
+    }
+    .date-nav:hover {
+      opacity: 1;
     }
     #github-link {
       color: white;
@@ -229,7 +238,55 @@ export function html(latest: TodayFuture): string {
     window.addEventListener('resize', adjustTickerSpeed);
 
     const dateDisplay = document.getElementById('date-display');
-    dateDisplay.querySelector('span').textContent = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toISOString().split('T')[0];
+    const startDate = '2024-12-24';
+    
+    dateDisplay.innerHTML = \`
+      <span class="date-nav" id="prev-date">⟨</span>
+      <span id="current-date">\${currentDate}</span>
+      <span class="date-nav" id="next-date">⟩</span>
+      <a id="github-link" href="https://github.com/kousun12/kpunk" target="_blank">[github]</a>
+    \`;
+
+    let displayedDate = currentDate;
+
+    function updatePage(date) {
+      fetch(\`/api/future/\${date}\`)
+        .then(response => response.json())
+        .then(data => {
+          if (data) {
+            document.getElementById('current-date').textContent = date;
+            document.querySelector('#future-container pre').textContent = data.future;
+            
+            const tickerContent = document.getElementById('news-ticker-content');
+            const newsText = data.news.map(n => \`\${n.title} • \`).join('');
+            tickerContent.innerHTML = newsText + newsText;
+            adjustTickerSpeed();
+            
+            displayedDate = date;
+          }
+        });
+    }
+
+    document.getElementById('prev-date').addEventListener('click', () => {
+      const date = new Date(displayedDate);
+      date.setDate(date.getDate() - 1);
+      if (date.toISOString().split('T')[0] < startDate) {
+        updatePage(currentDate);
+      } else {
+        updatePage(date.toISOString().split('T')[0]);
+      }
+    });
+
+    document.getElementById('next-date').addEventListener('click', () => {
+      const date = new Date(displayedDate);
+      date.setDate(date.getDate() + 1);
+      if (date.toISOString().split('T')[0] > currentDate) {
+        updatePage(startDate);
+      } else {
+        updatePage(date.toISOString().split('T')[0]);
+      }
+    });
 
     const ambientAudio = document.getElementById('ambient-sound');
     const birdsAudio = document.getElementById('birds-sound');
