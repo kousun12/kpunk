@@ -278,19 +278,22 @@ export function html(latest: TodayFuture): string {
             // Get the old future text
             const oldFutureText = document.querySelector('#future-container pre');
             
-            // Add new text and trigger fade transition
-            document.getElementById('future-container').appendChild(newFutureText);
-            
-            // Force browser reflow
-            void newFutureText.offsetWidth;
-            
-            // Start fade out of old text and fade in of new text
+            // Start fade out of old text
             oldFutureText.classList.add('fade-out');
-            newFutureText.style.opacity = '1';
             
-            // Remove old text after animation
+            // Wait for old text to fade out before starting new text fade in
             setTimeout(() => {
+              // Remove old text
               oldFutureText.remove();
+              
+              // Add new text
+              document.getElementById('future-container').appendChild(newFutureText);
+              
+              // Force browser reflow
+              void newFutureText.offsetWidth;
+              
+              // Start fade in of new text
+              newFutureText.style.opacity = '1';
             }, 1000);
             
             // Update news ticker content
