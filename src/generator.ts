@@ -1,13 +1,17 @@
 import { Env, LostFuture, NewsItem, TodayFuture } from "./types";
 
+const fakeUA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)" +
+  " Chrome/58.0.3029.110 Safari/537.3";
+
 export async function getFuture(env: Env, date?: string): Promise<TodayFuture> {
   const currentDate = new Date().toISOString().split("T")[0];
   const requestDate = date || currentDate;
   let found = await env.LOST_FUTURES_KV.get(requestDate);
-  const news = await getNewsItems(6, env);
+  const news = await getNewsItems(6, requestDate, env);
 
   if (found && news) {
-    return { date: currentDate, future: found, news: news };
+    return { date: requestDate, future: found, news: news };
   }
 
   let newsConcat = news
@@ -26,13 +30,16 @@ export async function getFuture(env: Env, date?: string): Promise<TodayFuture> {
     baseParams,
     extraHeaders,
   );
-  await env.LOST_FUTURES_KV.put(currentDate, future);
+  await env.LOST_FUTURES_KV.put(requestDate, future);
   return { date: requestDate, future, news: news };
 }
 
-async function getNewsItems(n: number, env: Env): Promise<NewsItem[]> {
-  const currentDate = new Date().toISOString().split("T")[0];
-  const key = `news-${n}-${currentDate}`;
+async function getNewsItems(
+  n: number,
+  date: string,
+  env: Env,
+): Promise<NewsItem[]> {
+  const key = `news-${n}-${date}`;
   let found = await env.LOST_FUTURES_KV.get(key);
   if (found) return JSON.parse(found);
 
@@ -43,8 +50,7 @@ async function getNewsItems(n: number, env: Env): Promise<NewsItem[]> {
     headers: {
       "X-Api-Key": apiKey,
       "Content-Type": "application/json",
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+      "User-Agent": fakeUA,
     },
   });
   const data: { articles: NewsItem[] } = await response.json();
@@ -55,26 +61,6 @@ async function getNewsItems(n: number, env: Env): Promise<NewsItem[]> {
   return data.articles;
 }
 
-async function getPrevious(n: number, env: Env): Promise<LostFuture[]> {
-  const currentDate = new Date().toISOString().split("T")[0];
-  const dates = Array.from({ length: n }, (_, i) => {
-    const date = new Date(currentDate);
-    date.setDate(date.getDate() - i);
-    return date.toISOString().split("T")[0];
-  });
-  const futures = [];
-  for (const date of dates) {
-    const future = await env.LOST_FUTURES_KV.get(date);
-    if (future) {
-      futures.push({ date, value: future });
-    }
-  }
-  return futures;
-}
-
-/**
- * Generate a single lost future.
- */
 async function generate(
   url: string,
   apiKey: string,
